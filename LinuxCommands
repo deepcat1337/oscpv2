@@ -1,0 +1,51 @@
+FILESYSTEM
+
+/bin  - Basic programs  like (ls,cat,cd)
+/sbin - System programs like (fdisk,mkfs,sysctl)
+/etc  - Configuration Files 
+/tmp  - Tempory files reset after boot
+/usr/bin - Application like ncat,nmap,apt
+/usr/share - Appplication support data files
+
+
+Linux Commands
+man - Program manual (use -k for specific search ex: man -k '^passwd$'
+apropos - Search manual with discriptions (ex: apropos partition)
+ls - list
+pwd - current directory
+mkdir - make directory(mkdir -p make parent directory ex: mkdir parent/folder1/folder2)
+cd - change directory
+rm -rf - remove direcoty (rm for remove files)
+
+
+Finding Files
+which - search direcotry that define $PATH enviroment
+locate - same
+find - Recursive search (ex: find / -name sbd*)
+
+
+Managing Kali Services
+systemctl - System control (you can start service or can enable at in boot time or check list of avaliable services )
+Start Service - systemctl start ssh
+Enable ssh on boot - systemctl enable ssh
+List Avaliable Services - systemctl list-unit-files
+
+SS command
+The ss command is a tool used to dump socket statistics and displays information in similar fashion (although simpler and faster) to netstat
+ss -plant |grep service_name
+
+
+Search,Install,Removing Tools
+apt update - Update the list of version discription etc.
+apt upgrade - Upgrade the install pacakge(in order to upgrade single tools apt upgrade tool_name)
+apt-cache - Search tools in Package Database(ex: apt-cache search tool_name)
+apt show - Read the Discription about the tools(ex: apt show tool_name)
+apt install - Install application (ex:apt install tool_name)
+apt remove --purge - Completely remove pacakge from Kali.(ex: apt remove --purge tool_name)
+dpkg - Install .deb pacakge files(ex:dpkg -i file.deb
+
+
+
+
+
+
