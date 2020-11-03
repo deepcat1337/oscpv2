@@ -1,0 +1,44 @@
+Port Redirection and Tunneling:-
+From RINETD:-
+	apt install rinetd
+	cat /etc/rinetd.conf
+	bindaddress bindport connectionaddress connectport
+	0.0.0.0     80       victim_ip         victim_port(80)
+	service rinetd restart
+
+From this the victim machine can access the particular address from attacker machine it could be linux or windows
+
+
+SSH Tunneling:-
+Make Sure to run ssh_localPortForward_script.sh before start the tunneling 
+
+SSH Local Port Forwarding:-(Accesing Victim internal subnet system )
+ssh -N -L [bind_address:]port:host:hostport [username@address]
+sudo ssh -N -L 0.0.0.0:445:192.168.1.110:445 student@10.11.0.128
+-N means no command to run
+-L to listen or bind the port
+192.168.1.110 Internal sunbet which not accesssable from outside (kali) with port number
+
+FYI:-
+Change the min protocol = SMB2 from /etc/samba/smb.conf before start 
+sudo /etc/init.d/smbd restart
+
+
+SSH Remote Port Forwarding:-(Forwarding Victim Port To outside) Only from Victim Side
+ssh -N -R [bind_address:]port:host:hostport [username@address]
+ssh -N -R 10.11.0.4:2221:127.0.0.1:3306 kali@10.11.0.4
+-N means no command to run
+-R Remote forward
+10.11.0.4:2221 Kali machine i.p address and port number
+127.0.0.1:3306 Victim service which you want to access from kali machine 
+nmap -sS -sV 127.0.0.1 -p 2221
+
+SSH Dynamic Port Forwarding:-
+
+ssh -N -D <address to bind to>:<port to bind to> <username>@<SSH server address>
+ssh -N -D 127.0.0.1:8080 student@10.11.0.128
+cat /etc/proxychains.conf
+socks4 127.0.0.1 8080
+proxychains nmap --top-ports=20 -sT -Pn 192.168.1.110
+
+

