@@ -1,0 +1,61 @@
+git config --global user.name "You're_username_here"
+git config --global user.email "You're_email_here"
+git init # This initiate a new git repo
+git status # Can Check status by this command
+nano demo.txt # create a demo file or you can add any file
+git add demo.txt # add this file to our index in the git repo
+git commit -m " my commit " # this will add demo.txt with it's file Content and with a comment "my comment"
+git commit -m "second commit" #This will update demo.txt file with name of "secound commit"
+git remote add origin https://github.com/your_git_repository_name_here.git
+git push -u origin master
+
+###############################################################################################################
+Add New Files to Git Repo 
+echo "# Your_Git_repo_name_here" >> README.md
+git init
+git add README.md
+git commit -m "first commit" 
+git remote add origin https://github.com/your_git_repository_name_here.git
+git push -u origin master
+
+################################################################################################################
+Create You're Identity
+git config --global user.name "Youre_username_here"
+git config --global user.email "Youre_email_here"
+
+################################################################################################################
+Check Git Settings
+git config --list
+###############################################################################################################
+Clone Git Repository
+git clone https://gitlab.com/clone_repo_here
+###############################################################################################################
+Deleting a File From Git
+git rm demo.txt 
+git commit -m "demo.txt file remove"
+git push
+###############################################################################################################
+Git Reset
+git reset  --hard commit number/HEAD
+###############################################################################################################
+Git Stash # In case you don't want change commit and also want to push in git later in any case
+sudo git stash
+###############################################################################################################
+git pull # sync you're local git to you're git remote server  this will fetch all remote files and merge it local
+git pull
+###############################################################################################################
+View git log
+###############################################################################################################
+Checking Branch # in git repo can have multiple branch to know your git branch use this command
+git branch
+
+###############################################################################################################
+push an existing repository from the command line
+git remote add origin https://github.com/your_repo_here.git
+git push -u origin master
+###############################################################################################################
+If u change something in demo.txt and want to update in git repo so
+git add demo.txt
+git commit -m "second commit"
+git push
+##############################################################################################################
