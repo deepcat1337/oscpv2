@@ -6,5 +6,5 @@ I will update the repo with new tricks and tips
 
 
 
-Do Not Pm me -_-
+Do Not Ping me -_-
 
